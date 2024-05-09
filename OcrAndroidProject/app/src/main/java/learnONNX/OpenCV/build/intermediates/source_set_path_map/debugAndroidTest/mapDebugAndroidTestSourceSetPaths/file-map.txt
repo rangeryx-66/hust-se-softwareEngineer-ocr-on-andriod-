@@ -1,0 +1,5 @@
+org.opencv.test.OpenCV-androidTest-0 /home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/generated/res/resValues/androidTest/debug
+org.opencv.test.OpenCV-mergeDebugAndroidTestResources-1 /home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
+org.opencv.test.OpenCV-mergeDebugAndroidTestResources-2 /home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
+org.opencv.test.OpenCV-debugAndroidTest-3 /home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/merged_res/debugAndroidTest/mergeDebugAndroidTestResources
+org.opencv.test.OpenCV-debug-4 /home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/packaged_res/debug/packageDebugResources
