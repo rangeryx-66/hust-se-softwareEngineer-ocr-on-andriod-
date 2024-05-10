@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">learnONNX</string>
+    <string name="input_image">Input Image</string>
+    <string name="perform_super_resolution">PerformOcr</string>
+    <string name="output_image">Output Image</string>
+    <string name="display_ocr">OCR 结果显示区域</string>
+    <string name="upload_image">upload_image</string>
+    <string name="our_ocr">Our_OCR</string>
+    <string name="app_icon_des">icon_des</string>
+</resources>
