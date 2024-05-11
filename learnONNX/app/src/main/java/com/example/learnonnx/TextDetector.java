@@ -1,7 +1,5 @@
 package com.example.learnonnx;
 
-import android.util.Log;
-
 import org.opencv.core.*;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
@@ -17,13 +15,10 @@ import ai.onnxruntime.OrtException;
 import ai.onnxruntime.OrtSession;
 
 public class TextDetector{
-    public static final String TAG="TextDetector";
-    public static float[][] testNet(int canvasSize, float magRatio,  Mat[] images,byte[] model) {
-        Log.d(TAG, "testNet: the mat is"+ Arrays.toString(images));
-        Log.d(TAG, "testNet: the length of model is"+ model.length);
-        List<Mat> images_resized = new ArrayList<>(images.length);
-        for (Mat image : images) {
-            images_resized.add(resizeAspectRatio(image, canvasSize, Imgproc.INTER_LINEAR, magRatio));
+    public static float[][][][] testNet(int canvasSize, float magRatio,  Mat[] images,byte[] model) {
+        List<Mat> images_resized = new ArrayList<>();
+        for (Mat image:images) {
+            images_resized.add( resizeAspectRatio(image, canvasSize, Imgproc.INTER_LINEAR, magRatio));
         }
         List<Mat> processedImages = new ArrayList<>();
         for (Mat n_img : images_resized) {
@@ -32,7 +27,7 @@ public class TextDetector{
             processedImages.add(transposedImg);
         }
         List<Mat> tensors = new ArrayList<>();
-
+        float[][][][]ans=new float[1][][][];
         // 将每个矩阵转换为 PyTorch 张量
         for (Mat mat : processedImages) {
             Mat tensor = convertToTensor(mat);
@@ -45,12 +40,12 @@ public class TextDetector{
             OrtSession session = env.createSession(model, options);
 
             // 2. 准备输入
-            float[][][][] inputs = new float[images.length][][][];
+            float[][] inputs = new float[images.length][];
             for (int i = 0; i < tensors.size(); i++) {
                 Mat tensor = tensors.get(i);
                 float[] inputData = new float[tensor.rows() * tensor.cols()];
                 tensor.get(0, 0, inputData);
-                inputs[i] = new float[][][] {{inputData}}; // Assuming 1 input channel
+                inputs[i] = inputData; // Assuming 1 input channel
             }
             // 创建输入容器
             Map<String, OnnxTensor> container = new HashMap<>();
@@ -64,16 +59,16 @@ public class TextDetector{
             OrtSession.Result output = session.run(container);
             // 获取输出
             OnnxTensor outputTensor = (OnnxTensor) output.get(0);
-            float[][] outputData = (float[][]) outputTensor.getValue();
+            float[][][][] outputData = (float[][][][]) outputTensor.getValue();
             // 5. 关闭会话和环境
             session.close();
             env.close();
-            return outputData;
+            ans=outputData;
         } catch (OrtException e) {
             e.printStackTrace();
         }
+        return ans;
 
-        return new float[0][];
     }
     private static Mat convertToTensor(Mat mat) {
         // 假设 mat 是单通道的浮点型矩阵
@@ -138,5 +133,4 @@ public class TextDetector{
         // Implement post-processing here
         return new ArrayList<>();
     }
-
 }
