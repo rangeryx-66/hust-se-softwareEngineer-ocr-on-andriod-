@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,8 +29,16 @@ import org.opencv.android.Utils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 
+import ai.onnxruntime.OnnxTensor;
+import ai.onnxruntime.OrtEnvironment;
+import ai.onnxruntime.OrtException;
+import ai.onnxruntime.OrtSession;
 public class MainActivity extends AppCompatActivity {
+    static {
+        System.loadLibrary("opencv_java4");
+    }
     private ImageView inputImage;
     private Button upload_image;
     private Button processOCRButton;
@@ -39,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityResultLauncher<Uri> takePictureLauncher;
     private Uri photoUri;
     private TextView ocr_result;
-    public static final String TAG="MyMainTest";
-
+    private final OrtEnvironment OrtEnv=OrtEnvironment.getEnvironment();
+    OrtSession ortSes;
     //    Button processOCRButton = findViewById(R.id.process_ocr);
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -51,16 +58,24 @@ public class MainActivity extends AppCompatActivity {
         processOCRButton = findViewById(R.id.process_ocr);
         upload_image = findViewById(R.id.upload_image);
         ocr_result=findViewById(R.id.OCRResult);
+        initOpenCV();
         registerLaunchers();
+        OrtSession.SessionOptions ortOpt = new OrtSession.SessionOptions();
+        try {
+            ortSes=OrtEnv.createSession(readModel(),ortOpt);
+        } catch (OrtException | IOException e) {
+            throw new RuntimeException(e);
+        }
         upload_image.setOnClickListener(view -> chooseDialog());
         processOCRButton.setOnClickListener(view ->
         {
             try {
                 getMatFromUri(this, photoUri);
-                float[][] result=TextDetector.testNet(2560, 1.f, getMatFromUri(this, photoUri),readModel());
-                ocr_result.setText(Arrays.deepToString(result));
-                Log.d(TAG, "the result of textdetector is "+ Arrays.deepToString(result));
-            } catch (IOException e) {
+                float[][][][] final_result= TextDetector.testNet(getMatFromUri(this, photoUri), OrtEnv, ortSes);
+                Log.w(TAG, "onCreate: result:"+ Arrays.deepToString(final_result));
+                Log.w(TAG, "onCreate: the length of result:"+ Arrays.deepToString(final_result).length());
+                 ocr_result.setText(Arrays.deepToString(final_result).substring(0,300000));
+            } catch (OrtException e) {
                 throw new RuntimeException(e);
             }
         });
@@ -127,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static Mat[] getMatFromUri(Context context, Uri uri) {
         Mat mat = null;
-        Mat[] matArray = new Mat[1];
         try {
             // 从 Uri 获取 InputStream
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
@@ -135,19 +149,7 @@ public class MainActivity extends AppCompatActivity {
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             if (bitmap != null) {
                 // 创建与 Bitmap 同样大小的 Mat
-                Log.d(TAG, "11 ");
-                bitmap.getHeight();
-                Log.d(TAG, "12 ");
-                bitmap.getWidth();
-                Log.d(TAG, "13 ");
-                Log.d(TAG, "Cvtype:"+String.valueOf(CvType.CV_8UC4));
-                Log.d(TAG, "14 ");
-                if(OpenCVLoader.initLocal())
-                    Log.d(TAG, "init opencv success");
-                else {
-                    Log.d(TAG, "init opencv fail");
-                }
-                mat = new Mat(bitmap.getHeight(), bitmap.getWidth(), CvType.CV_8UC4);
+                mat = new Mat(bitmap.getHeight(), bitmap.getWidth(), CvType.CV_8UC3);
                 Log.d(TAG, "15 ");
                 // 将 Bitmap 转换为 Mat
                 Utils.bitmapToMat(bitmap, mat);
@@ -160,13 +162,21 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        matArray[0] = mat;
-        return matArray;
+        return new Mat[]{mat};
+    }
+    private void initOpenCV() {
+        if (OpenCVLoader.initLocal()) {
+            Log.d(TAG, "OpenCV loaded");
+        } else {
+            Log.e(TAG, "OpenCV not loaded");
+        }
     }
     private byte[] readModel() throws IOException {
         int modelID = R.raw.detector_craft;
         InputStream is = MainActivity.this.getResources().openRawResource(modelID);
         return is.readAllBytes();
     }
+
+    public static final String TAG = "MyMainTest";
 }
 

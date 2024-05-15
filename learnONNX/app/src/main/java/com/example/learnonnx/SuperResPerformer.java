@@ -31,7 +31,6 @@ class SuperResPerformer {
 
     public Result upscale(InputStream inputStream, OrtEnvironment ortEnv, OrtSession ortSession) {
         Result result = new Result();
-
         try {
             // Step 1: Convert image into byte array (raw image bytes)
             byte[] rawImageBytes = inputStream.readAllBytes(); // Java 9 and above
