@@ -1,2 +1,2 @@
-ninja: Entering directory `/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/Debug/6q6y3a1k/x86_64'
+ninja: Entering directory `/home/channey/AndroidStudioProjects/learnONNX/OpenCV/.cxx/Debug/6q6y3a1k/x86_64'
 ninja: no work to do.

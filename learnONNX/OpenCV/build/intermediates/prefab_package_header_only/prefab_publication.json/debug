@@ -1,5 +1,5 @@
 {
-  "installationFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build/intermediates/prefab_package/debug/prefab",
+  "installationFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/prefab_package/debug/prefab",
   "gradlePath": ":OpenCV",
   "packageInfo": {
     "packageName": "OpenCV",
@@ -8,7 +8,7 @@
     "modules": [
       {
         "moduleName": "opencv_jni_shared",
-        "moduleHeaders": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/native/jni/include",
+        "moduleHeaders": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/native/jni/include",
         "moduleExportLibraries": [],
         "abis": []
       }

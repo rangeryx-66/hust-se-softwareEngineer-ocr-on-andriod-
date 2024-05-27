@@ -15,7 +15,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,10 +28,8 @@ import org.opencv.android.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
+import java.util.Objects;
 
-import ai.onnxruntime.OnnxTensor;
 import ai.onnxruntime.OrtEnvironment;
 import ai.onnxruntime.OrtException;
 import ai.onnxruntime.OrtSession;
@@ -47,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
     private Uri photoUri;
     private TextView ocr_result;
     private final OrtEnvironment OrtEnv=OrtEnvironment.getEnvironment();
-    OrtSession ortSes;
-    //    Button processOCRButton = findViewById(R.id.process_ocr);
+    private OrtSession ortCraftSession;
+    private OrtSession ortCRNNSession;
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
         registerLaunchers();
         OrtSession.SessionOptions ortOpt = new OrtSession.SessionOptions();
         try {
-            ortSes=OrtEnv.createSession(readModel(),ortOpt);
+            ortCraftSession=OrtEnv.createSession(readModel("craft"),ortOpt);
+            ortCRNNSession=OrtEnv.createSession(readModel("crnn"),ortOpt);
         } catch (OrtException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -71,16 +70,34 @@ public class MainActivity extends AppCompatActivity {
         {
             try {
                 getMatFromUri(this, photoUri);
-                float[][][][] final_result= TextDetector.testNet(getMatFromUri(this, photoUri), OrtEnv, ortSes);
-                Log.w(TAG, "onCreate: result:"+ Arrays.deepToString(final_result));
-                Log.w(TAG, "onCreate: the length of result:"+ Arrays.deepToString(final_result).length());
-                 ocr_result.setText(Arrays.deepToString(final_result).substring(0,300000));
+                String final_result= ProcessOCR.startOCR(getMatFromUri(this, photoUri), OrtEnv, ortCraftSession,ortCRNNSession);
+                ocr_result.setText(final_result);
             } catch (OrtException e) {
                 throw new RuntimeException(e);
             }
         });
     }
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (ortCraftSession != null) {
+            try {
+                ortCraftSession.close();
+            } catch (OrtException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (ortCRNNSession != null) {
+            try {
+                ortCRNNSession.close();
+            } catch (OrtException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (OrtEnv != null) {
+            OrtEnv.close();
+        }
+    }
     private void registerLaunchers() {
         getContentLauncher = registerForActivityResult(
                 new ActivityResultContracts.GetContent(),
@@ -150,14 +167,11 @@ public class MainActivity extends AppCompatActivity {
             if (bitmap != null) {
                 // 创建与 Bitmap 同样大小的 Mat
                 mat = new Mat(bitmap.getHeight(), bitmap.getWidth(), CvType.CV_8UC3);
-                Log.d(TAG, "15 ");
                 // 将 Bitmap 转换为 Mat
                 Utils.bitmapToMat(bitmap, mat);
-                Log.d(TAG, "2 ");
             }
             if (inputStream != null) {
                 inputStream.close(); // 关闭 InputStream
-                Log.d(TAG, "3 ");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -171,8 +185,12 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "OpenCV not loaded");
         }
     }
-    private byte[] readModel() throws IOException {
-        int modelID = R.raw.detector_craft;
+    private byte[] readModel(String model) throws IOException {
+        int modelID = 0;
+        if (Objects.equals(model, "craft"))
+            modelID = R.raw.craft;
+        if(Objects.equals(model, "crnn"))
+            modelID = R.raw.detector;
         InputStream is = MainActivity.this.getResources().openRawResource(modelID);
         return is.readAllBytes();
     }

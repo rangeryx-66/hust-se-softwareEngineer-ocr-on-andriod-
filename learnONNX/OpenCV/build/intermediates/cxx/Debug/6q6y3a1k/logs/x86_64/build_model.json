@@ -8,9 +8,9 @@
     "triple": "x86_64-linux-android",
     "llvmTriple": "x86_64-none-linux-android"
   },
-  "cxxBuildFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/Debug/6q6y3a1k/x86_64",
-  "soFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build/intermediates/cxx/Debug/6q6y3a1k/obj/x86_64",
-  "soRepublishFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build/intermediates/cmake/debug/obj/x86_64",
+  "cxxBuildFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/.cxx/Debug/6q6y3a1k/x86_64",
+  "soFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/cxx/Debug/6q6y3a1k/obj/x86_64",
+  "soRepublishFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/cmake/debug/obj/x86_64",
   "abiPlatformVersion": 21,
   "cmake": {
     "effectiveConfiguration": {
@@ -37,13 +37,13 @@
     ],
     "cmakeSettingsConfiguration": "android-gradle-plugin-predetermined-name",
     "module": {
-      "cxxFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx",
-      "intermediatesBaseFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build/intermediates",
-      "intermediatesFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build/intermediates/cxx",
+      "cxxFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/.cxx",
+      "intermediatesBaseFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates",
+      "intermediatesFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/cxx",
       "gradleModulePathName": ":OpenCV",
-      "moduleRootFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV",
-      "moduleBuildFile": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build.gradle",
-      "makeFile": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/libcxx_helper/CMakeLists.txt",
+      "moduleRootFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV",
+      "moduleBuildFile": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/build.gradle",
+      "makeFile": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/libcxx_helper/CMakeLists.txt",
       "buildSystem": "CMAKE",
       "ndkFolder": "/home/channey/Android/Sdk/ndk/25.1.8937393",
       "ndkFolderBeforeSymLinking": "/home/channey/Android/Sdk/ndk/25.1.8937393",
@@ -140,7 +140,7 @@
         "SYSTEM": {}
       },
       "project": {
-        "rootBuildGradleFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX",
+        "rootBuildGradleFolder": "/home/channey/AndroidStudioProjects/learnONNX",
         "sdkFolder": "/home/channey/Android/Sdk",
         "isBuildOnlyTargetAbiEnabled": true,
         "ideBuildTargetAbi": "x86_64",
@@ -160,12 +160,12 @@
   "buildSettings": {
     "environmentVariables": []
   },
-  "prefabFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/Debug/6q6y3a1k/prefab/x86_64",
+  "prefabFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/.cxx/Debug/6q6y3a1k/prefab/x86_64",
   "isActiveAbi": true,
   "fullConfigurationHash": "6q6y3a1ka5k5d3871p4l515o645wu45s452k6i1s2g3i3p2s6z45381w2e3r",
   "fullConfigurationHashKey": "# Values used to calculate the hash in this folder name.\n# Should not depend on the absolute path of the project itself.\n#   - AGP: 8.3.1.\n#   - $NDK is the path to NDK 25.1.8937393.\n#   - $PROJECT is the path to the parent folder of the root Gradle build file.\n#   - $ABI is the ABI to be built with. The specific value doesn\u0027t contribute to the value of the hash.\n#   - $HASH is the hash value computed from this text.\n#   - $CMAKE is the path to CMake 3.22.1.\n#   - $NINJA is the path to Ninja.\n-H$PROJECT/OpenCV/libcxx_helper\n-DCMAKE_SYSTEM_NAME\u003dAndroid\n-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON\n-DCMAKE_SYSTEM_VERSION\u003d21\n-DANDROID_PLATFORM\u003dandroid-21\n-DANDROID_ABI\u003d$ABI\n-DCMAKE_ANDROID_ARCH_ABI\u003d$ABI\n-DANDROID_NDK\u003d$NDK\n-DCMAKE_ANDROID_NDK\u003d$NDK\n-DCMAKE_TOOLCHAIN_FILE\u003d$NDK/build/cmake/android.toolchain.cmake\n-DCMAKE_MAKE_PROGRAM\u003d$NINJA\n-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d$PROJECT/OpenCV/build/intermediates/cxx/Debug/$HASH/obj/$ABI\n-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d$PROJECT/OpenCV/build/intermediates/cxx/Debug/$HASH/obj/$ABI\n-DCMAKE_BUILD_TYPE\u003dDebug\n-B$PROJECT/OpenCV/.cxx/Debug/$HASH/$ABI\n-GNinja\n-DANDROID_STL\u003dc++_shared",
   "configurationArguments": [
-    "-H/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/libcxx_helper",
+    "-H/home/channey/AndroidStudioProjects/learnONNX/OpenCV/libcxx_helper",
     "-DCMAKE_SYSTEM_NAME\u003dAndroid",
     "-DCMAKE_EXPORT_COMPILE_COMMANDS\u003dON",
     "-DCMAKE_SYSTEM_VERSION\u003d21",
@@ -176,13 +176,13 @@
     "-DCMAKE_ANDROID_NDK\u003d/home/channey/Android/Sdk/ndk/25.1.8937393",
     "-DCMAKE_TOOLCHAIN_FILE\u003d/home/channey/Android/Sdk/ndk/25.1.8937393/build/cmake/android.toolchain.cmake",
     "-DCMAKE_MAKE_PROGRAM\u003d/home/channey/Android/Sdk/cmake/3.22.1/bin/ninja",
-    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build/intermediates/cxx/Debug/6q6y3a1k/obj/x86_64",
-    "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build/intermediates/cxx/Debug/6q6y3a1k/obj/x86_64",
+    "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY\u003d/home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/cxx/Debug/6q6y3a1k/obj/x86_64",
+    "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY\u003d/home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/cxx/Debug/6q6y3a1k/obj/x86_64",
     "-DCMAKE_BUILD_TYPE\u003dDebug",
-    "-B/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/Debug/6q6y3a1k/x86_64",
+    "-B/home/channey/AndroidStudioProjects/learnONNX/OpenCV/.cxx/Debug/6q6y3a1k/x86_64",
     "-GNinja",
     "-DANDROID_STL\u003dc++_shared"
   ],
   "stlLibraryFile": "/home/channey/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/sysroot/usr/lib/x86_64-linux-android/libc++_shared.so",
-  "intermediatesParentFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build/intermediates/cxx/Debug/6q6y3a1k"
+  "intermediatesParentFolder": "/home/channey/AndroidStudioProjects/learnONNX/OpenCV/build/intermediates/cxx/Debug/6q6y3a1k"
 }

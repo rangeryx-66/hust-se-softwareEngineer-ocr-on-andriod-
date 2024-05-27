@@ -3,11 +3,8 @@ package com.example.learnonnx;
 import android.util.Log;
 
 import org.opencv.core.*;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
-import java.io.File;
-import java.io.*;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.*;
@@ -24,7 +21,7 @@ public class TextDetector {
         Mat image = images[0];
         Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2RGB);
         Imgproc.resize(image, image, new Size(800, 608));
-        image.convertTo(image, CvType.CV_32F);
+        image.convertTo(image, CvType.CV_32F, 1.0 / 255.0);
         FloatBuffer buffer = FloatBuffer.allocate(3 * 800 * 608);
         image.get(0, 0, buffer.array());
         float[] imgData = new float[3 * 800 * 608];
@@ -35,19 +32,18 @@ public class TextDetector {
                 }
             }
         }
-        float[][][][] outputData = new float[0][][][];
+        float[][][][] scoreTextLink = new float[0][][][];
+        float[][][][] features = new float[0][][][];
         try {
             long[] shape = new long[]{1, 3, 608, 800};
             OnnxTensor tensor = OnnxTensor.createTensor(ortEnv, FloatBuffer.wrap(imgData), shape);
             Map<String, OnnxTensor> inputs = Collections.singletonMap("input", tensor);
             OrtSession.Result results = ortSession.run(inputs);
-            Log.w(TAG, "testNet: runing sucessfully" );
-            outputData = (float[][][][]) results.get(0).getValue();
+            scoreTextLink = (float[][][][]) results.get(0).getValue();
+            features = (float[][][][]) results.get(1).getValue();
         } catch (OrtException e) {
             e.printStackTrace();
         }
-        ortSession.close();
-        ortEnv.close();
-        return outputData;
+        return scoreTextLink;
     }
 }
