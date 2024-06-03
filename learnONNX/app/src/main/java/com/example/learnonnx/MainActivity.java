@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -26,8 +29,10 @@ import org.opencv.core.*;
 import org.opencv.android.Utils;
 
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
 
 import ai.onnxruntime.OrtEnvironment;
@@ -47,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private final OrtEnvironment OrtEnv=OrtEnvironment.getEnvironment();
     private OrtSession ortCraftSession;
     private OrtSession ortCRNNSession;
+    private Canvas canvas;
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +75,50 @@ public class MainActivity extends AppCompatActivity {
         processOCRButton.setOnClickListener(view ->
         {
             try {
-                getMatFromUri(this, photoUri);
-                String final_result= ProcessOCR.startOCR(getMatFromUri(this, photoUri), OrtEnv, ortCraftSession,ortCRNNSession);
-                ocr_result.setText(final_result);
-            } catch (OrtException e) {
+                InputStream inputStream = getAssets().open("super_res_input.png");
+                Bitmap photo = BitmapFactory.decodeStream(inputStream);
+                Bitmap supbitmap = photo.copy(Bitmap.Config.ARGB_8888, true);
+                inputStream.close();
+//                Canvas canvas = new Canvas(mutableBitmap);
+//                Paint paint = new Paint();
+//                paint.setColor(Color.RED);
+//                paint.setStyle(Paint.Style.STROKE);
+//                paint.setStrokeWidth(5);
+//
+//                // 示例矩形框的坐标，可以根据实际需求调整
+//                int left = 50;
+//                int top = 50;
+//                int right = 200;
+//                int bottom = 200;
+//                canvas.drawRect(left, top, right, bottom, paint);
+//
+//                // 更新ImageView显示
+//                inputImage.setImageBitmap(mutableBitmap);
+//                inputStream.close();
+                List<Object> final_result= ProcessOCR.startOCR(getMatFromUri(this, photoUri), OrtEnv, ortCraftSession,ortCRNNSession);
+                InputStream supinputStream = this.getContentResolver().openInputStream(photoUri);
+                // 将 InputStream 转换为 Bitmap
+                Bitmap supphoto = BitmapFactory.decodeStream(supinputStream);
+                Bitmap mutableBitmap = supphoto.copy(Bitmap.Config.ARGB_8888, true);
+                Canvas canvas = new Canvas(mutableBitmap);
+                Paint paint= new Paint();
+                paint.setColor(Color.RED);
+                paint.setStyle(Paint.Style.STROKE);
+                paint.setStrokeWidth(5);
+                Log.d(TAG, "onCreate: "+ photo.getWidth()+" "+ photo.getHeight());
+                float xratio= ((float) photo.getWidth()) /800;
+                float yratio=((float) photo.getHeight())/608;
+//                float xratio=1.0f;
+//                float yratio=1.0f;
+                List<int[]> intHorizenlist=(List<int[]>) final_result.get(1);
+                for(int[] box:intHorizenlist){
+                    canvas.drawRect((float)box[0]*xratio*2.6f,(float)box[2]*yratio*3,(float)box[1]*xratio*2.6f,(float)box[3]*yratio*3,paint);
+                    Log.d(TAG, "onCreate: draw"+(float)box[0]*xratio+" "+(float)box[3]*yratio+" "+(float)box[1]*xratio+" "+(float)box[2]*yratio);
+                }
+                Log.d(TAG, "drawRects: ");
+                inputImage.setImageBitmap(mutableBitmap);
+                ocr_result.setText((String)final_result.get(0));
+            } catch (OrtException | IOException e) {
                 throw new RuntimeException(e);
             }
         });
