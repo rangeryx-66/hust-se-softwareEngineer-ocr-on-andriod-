@@ -16,6 +16,24 @@
   - 🛠️ Use Android Studio to preprocess images, run CRAFT inference, extract cropped character images, perform CRNN inference, decode, and output to frontend
 - [ ] **Task 6: Export Android APK File**
   - 📦 Export the final APK file
+## Code Architecture
+
+The code structure under `learnONNX/app/src/main/java/com/example/learnonnx` is as follows:
+
+- **MainActivity.java**: The main function, responsible for:
+  - Initializing the UI
+  - Designing interface interactions
+  - Requesting image reading and photographing from the Android system
+  - Invoking OCR functionality
+  - Updating images with bounding boxes
+  - Outputting results to a text box
+- **ProcessOCR.java**: Executes OCR by calling `detector`, `postProcess`, and `recognizer`, handling parameter and result transmission.
+- **TextDetector.java**: Executes the detector, including image preprocessing and inference using the ONNX model.
+- **PostProcess.java**: Processes the results from the CRAFT model to generate coordinates for detected sub-images containing characters.
+- **GetImageList.java**: Crops and transforms images based on detected sub-image coordinates to fit the CRNN model input format.
+- **AlignCollate.java**: Preprocesses cropped images, either transforming them if too long or padding the right side to fit the CRNN input.
+- **Recognizer.java**: Calls `GetImageList` and `AlignCollate`, and infers the CRNN results.
+- **TextDecoder.java**: Decodes the CRNN results to get the final output.
 ## Project Structure
 
 ```plaintext
