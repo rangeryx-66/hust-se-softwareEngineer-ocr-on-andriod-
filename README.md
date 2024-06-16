@@ -1,9 +1,35 @@
-# hust-se-softwareEngineering-ocr-on-andriod-2024
-### members:杨轩，万昌麟
-## goals of the project:
-- [ ] 任务一  `下载ocr模型并理解结构和实现原理`https://github.com/hlp-ai/yimt/tree/main/ocr
-- [ ] 任务二  `裁剪模型实现轻量化`
-- [ ] 任务三  `熟悉安卓开发`https://developer.android.google.cn/studio/install
-- [ ] 任务四  `将模型移植到安卓平台`
-- [ ] 任务五  `用andriod studio实现图片的预处理和最后处理`
-- [ ] 任务六  `两部分合在一起实现完整的app`
+# HUST-SE-SoftwareEngineering-OCR-on-Android-2024
+
+### Members: 杨轩, 万昌麟
+
+## Goals of the Project
+
+- [ ] **Task 1: Download and Understand OCR Model**
+  - 📥 [OCR Model Download and Implementation](https://github.com/hlp-ai/yimt/tree/main/ocr)
+- [ ] **Task 2: Optimize the Model**
+  - ✂️ Trim the model for lightweight implementation
+- [ ] **Task 3: Familiarize with Android Development**
+  - 📱 [Android Studio Installation and Setup](https://developer.android.google.cn/studio/install)
+- [ ] **Task 4: Implement Android Frontend Design and Code**
+  - 🎨 Design and code the frontend for Android
+- [ ] **Task 5: Android Studio Implementation**
+  - 🛠️ Use Android Studio to preprocess images, run CRAFT inference, extract cropped character images, perform CRNN inference, decode, and output to frontend
+- [ ] **Task 6: Export Android APK File**
+  - 📦 Export the final APK file
+## Project Structure
+
+```plaintext
+hust-se-softwareEngineering-ocr-on-android-2024/
+│
+├── model/                   # Directory for the OCR model
+├── android/                 # Android project directory
+│   ├── app/                 # Main app directory
+│   ├── build/               # Build output
+│   └── ...                  # Other directories and files
+├── README.md                # Project README file
+└── ...                      # Other files
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
