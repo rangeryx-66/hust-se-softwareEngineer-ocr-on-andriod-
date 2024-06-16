@@ -1,0 +1,4 @@
+/home/channey/Android/Sdk/cmake/3.22.1/bin/ninja \
+  -C \
+  /home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/RelWithDebInfo/k3l6ic5n/armeabi-v7a \
+  opencv_jni_shared

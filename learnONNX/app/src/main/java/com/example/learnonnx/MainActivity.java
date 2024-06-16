@@ -28,8 +28,8 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.*;
 import org.opencv.android.Utils;
 
-
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -75,47 +75,24 @@ public class MainActivity extends AppCompatActivity {
         processOCRButton.setOnClickListener(view ->
         {
             try {
-                InputStream inputStream = getAssets().open("super_res_input.png");
-                Bitmap photo = BitmapFactory.decodeStream(inputStream);
-                Bitmap supbitmap = photo.copy(Bitmap.Config.ARGB_8888, true);
-                inputStream.close();
-//                Canvas canvas = new Canvas(mutableBitmap);
-//                Paint paint = new Paint();
-//                paint.setColor(Color.RED);
-//                paint.setStyle(Paint.Style.STROKE);
-//                paint.setStrokeWidth(5);
-//
-//                // 示例矩形框的坐标，可以根据实际需求调整
-//                int left = 50;
-//                int top = 50;
-//                int right = 200;
-//                int bottom = 200;
-//                canvas.drawRect(left, top, right, bottom, paint);
-//
-//                // 更新ImageView显示
-//                inputImage.setImageBitmap(mutableBitmap);
-//                inputStream.close();
+                // process OCR
                 List<Object> final_result= ProcessOCR.startOCR(getMatFromUri(this, photoUri), OrtEnv, ortCraftSession,ortCRNNSession);
-                InputStream supinputStream = this.getContentResolver().openInputStream(photoUri);
-                // 将 InputStream 转换为 Bitmap
-                Bitmap supphoto = BitmapFactory.decodeStream(supinputStream);
-                Bitmap mutableBitmap = supphoto.copy(Bitmap.Config.ARGB_8888, true);
+                InputStream inputStream = this.getContentResolver().openInputStream(photoUri);
+                Bitmap photo = BitmapFactory.decodeStream(inputStream);
+                if(inputStream!=null)
+                    inputStream.close();
+                Bitmap mutableBitmap = photo.copy(Bitmap.Config.ARGB_8888, true);
                 Canvas canvas = new Canvas(mutableBitmap);
                 Paint paint= new Paint();
                 paint.setColor(Color.RED);
                 paint.setStyle(Paint.Style.STROKE);
                 paint.setStrokeWidth(5);
-                Log.d(TAG, "onCreate: "+ photo.getWidth()+" "+ photo.getHeight());
                 float xratio= ((float) photo.getWidth()) /800;
                 float yratio=((float) photo.getHeight())/608;
-//                float xratio=1.0f;
-//                float yratio=1.0f;
                 List<int[]> intHorizenlist=(List<int[]>) final_result.get(1);
                 for(int[] box:intHorizenlist){
-                    canvas.drawRect((float)box[0]*xratio*2.6f,(float)box[2]*yratio*3,(float)box[1]*xratio*2.6f,(float)box[3]*yratio*3,paint);
-                    Log.d(TAG, "onCreate: draw"+(float)box[0]*xratio+" "+(float)box[3]*yratio+" "+(float)box[1]*xratio+" "+(float)box[2]*yratio);
+                    canvas.drawRect((float)box[0]*xratio,(float)box[2]*yratio,(float)box[1]*xratio,(float)box[3]*yratio,paint);
                 }
-                Log.d(TAG, "drawRects: ");
                 inputImage.setImageBitmap(mutableBitmap);
                 ocr_result.setText((String)final_result.get(0));
             } catch (OrtException | IOException e) {
@@ -206,23 +183,19 @@ public class MainActivity extends AppCompatActivity {
     public static Mat[] getMatFromUri(Context context, Uri uri) {
         Mat mat = null;
         try {
-            // 从 Uri 获取 InputStream
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
-            // 将 InputStream 转换为 Bitmap
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
             if (bitmap != null) {
-                // 创建与 Bitmap 同样大小的 Mat
                 mat = new Mat(bitmap.getHeight(), bitmap.getWidth(), CvType.CV_8UC3);
-                // 将 Bitmap 转换为 Mat
                 Utils.bitmapToMat(bitmap, mat);
             }
             if (inputStream != null) {
-                inputStream.close(); // 关闭 InputStream
+                inputStream.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new Mat[]{mat};
+                return new Mat[]{mat};
     }
     private void initOpenCV() {
         if (OpenCVLoader.initLocal()) {
@@ -240,7 +213,22 @@ public class MainActivity extends AppCompatActivity {
         InputStream is = MainActivity.this.getResources().openRawResource(modelID);
         return is.readAllBytes();
     }
+    private Bitmap Mat32FC1toBitmap(Mat test){
+        Mat normalized=new Mat();
+        Core.normalize(test,normalized,0,255,Core.NORM_MINMAX);
+        Mat unit8=new Mat();
+        normalized.convertTo(unit8,CvType.CV_8UC1);
+        Log.d(TAG, "onCreate: unit8"+unit8);
+        Bitmap testbitmap=Bitmap.createBitmap(unit8.cols(),unit8.rows(), Bitmap.Config.ARGB_8888);
+        Utils.matToBitmap(unit8,testbitmap);
+        return testbitmap;
+    }
 
     public static final String TAG = "MyMainTest";
+    private File getOutputFile() {
+        File directory = getFilesDir();
+        File file = new File(directory, "output.txt");
+        Log.d("FilePath", "File path: " + file.getAbsolutePath());
+        return file;
+    }
 }
-

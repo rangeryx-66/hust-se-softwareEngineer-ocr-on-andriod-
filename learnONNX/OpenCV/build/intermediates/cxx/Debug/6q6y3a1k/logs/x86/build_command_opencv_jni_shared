@@ -1,0 +1,4 @@
+/home/channey/Android/Sdk/cmake/3.22.1/bin/ninja \
+  -C \
+  /home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/Debug/6q6y3a1k/x86 \
+  opencv_jni_shared

@@ -7,8 +7,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,20 +25,16 @@ public class GetImageList {
         }
     }
 
-    public static List<Object> getImageList(
-            List<List<Point>> horizontalList,
-            List<List<Point>> freeList,
-            Mat img,
-            int modelHeight,
-            boolean sortOutput) {
+    public static List<Object> getImageList(List<List<Point>> horizontalList, List<List<Point>> freeList, Mat image, int modelHeight, boolean sortOutput) {
         List<Object> ans2 = new ArrayList<>();
         List<Mat> ans = new ArrayList<>();
         List<BoxImagePair> imageList = new ArrayList<>();
+        Mat img = new Mat();
+        image.copyTo(img);
         double maxRatioHori = 1;
         double maxRatioFree = 1;
         int maximumY = img.rows();
         int maximumX = img.cols();
-
         for (List<Point> box : freeList) {
             Mat transformedImg = fourPointTransform(img, box);
             double ratio = calculateRatio(transformedImg.cols(), transformedImg.rows());
@@ -57,10 +53,8 @@ public class GetImageList {
             int xMax = Math.min((int) box.get(1).x, maximumX);
             int yMin = Math.max(0, (int) box.get(2).y);
             int yMax = Math.min((int) box.get(0).y, maximumY);
-            if(xMin>xMax|| yMin>yMax){
-                Log.w(TAG, "getImageList: xmin,xmax,ymin,ymax error"+xMin+" "+xMax+" "+yMin+" "+yMax);
-            }
             Mat cropImg = img.submat(yMin, yMax, xMin, xMax);
+            Log.d(TAG, "getImageList: yMin, yMax, xMin, xMax "+yMin+" "+yMax+" "+xMin+" "+xMax);
             int width = xMax - xMin;
             int height = yMax - yMin;
             double ratio = calculateRatio(width, height);
@@ -79,27 +73,26 @@ public class GetImageList {
         int maxWidth = (int) (Math.ceil(maxRatio) * modelHeight);
 
         if (sortOutput) {
-            imageList = imageList.stream()
-                    .sorted(Comparator.comparingInt(item -> (int) item.box.get(0).y))
-                    .collect(Collectors.toList());
+            imageList.sort(Comparator.comparingInt(a -> (int) a.box.get(0).y));
         }
-        ans2.add(ans);
+        ans2.add(imageList);
         ans2.add(maxWidth);
         return ans2;
     }
     public static Mat computeRatioAndResize(Mat img, int width, int height, int modelHeight) {
         double ratio = calculateRatio(width, height);
         int newWidth;
+        Mat resizedMat=new Mat();
         if (ratio < 1.0) {
             ratio = calculateRatio(width, height);
             newWidth = modelHeight;
             int newHeight = (int) (modelHeight * ratio);
-            Imgproc.resize(img, img, new Size(newWidth, newHeight), 0, 0, Imgproc.INTER_LANCZOS4);
+            Imgproc.resize(img, resizedMat, new Size(newWidth, newHeight), 0, 0, Imgproc.INTER_LANCZOS4);
         } else {
             newWidth = (int) (modelHeight * ratio);
-            Imgproc.resize(img, img, new Size(newWidth, modelHeight), 0, 0, Imgproc.INTER_LANCZOS4);
+            Imgproc.resize(img, resizedMat, new Size(newWidth, modelHeight), 0, 0, Imgproc.INTER_LANCZOS4);
         }
-        return img;
+         return resizedMat;
     }
 
     public static Mat fourPointTransform(Mat image, List<Point> pts) {

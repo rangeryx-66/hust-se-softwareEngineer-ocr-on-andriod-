@@ -1,0 +1,19 @@
+<lint-module
+    format="1"
+    dir="/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV"
+    name=":OpenCV"
+    type="LIBRARY"
+    maven="learnONNX:OpenCV:"
+    agpVersion="8.3.1"
+    buildFolder="build"
+    bootClassPath="/home/channey/Android/Sdk/platforms/android-34/android.jar:/home/channey/Android/Sdk/build-tools/34.0.0/core-lambda-stubs.jar"
+    javaSourceLevel="11"
+    compileTarget="android-34"
+    neverShrinking="true">
+  <lintOptions
+      abortOnError="true"
+      absolutePaths="true"
+      checkReleaseBuilds="true"
+      explainIssues="true"/>
+  <variant name="release"/>
+</lint-module>

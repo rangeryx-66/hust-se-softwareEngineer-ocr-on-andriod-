@@ -1,0 +1,50 @@
+{
+  "installationFolder": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/build/intermediates/prefab_package/release/prefab",
+  "gradlePath": ":OpenCV",
+  "packageInfo": {
+    "packageName": "OpenCV",
+    "packageSchemaVersion": 2,
+    "packageDependencies": [],
+    "modules": [
+      {
+        "moduleName": "opencv_jni_shared",
+        "moduleHeaders": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/native/jni/include",
+        "moduleExportLibraries": [],
+        "abis": [
+          {
+            "abiName": "armeabi-v7a",
+            "abiApi": 21,
+            "abiNdkMajor": 25,
+            "abiStl": "c++_shared",
+            "abiLibrary": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/RelWithDebInfo/k3l6ic5n/armeabi-v7a/libopencv_jni_shared.a",
+            "abiAndroidGradleBuildJsonFile": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/RelWithDebInfo/k3l6ic5n/armeabi-v7a/android_gradle_build.json"
+          },
+          {
+            "abiName": "arm64-v8a",
+            "abiApi": 21,
+            "abiNdkMajor": 25,
+            "abiStl": "c++_shared",
+            "abiLibrary": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/RelWithDebInfo/k3l6ic5n/arm64-v8a/libopencv_jni_shared.a",
+            "abiAndroidGradleBuildJsonFile": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/RelWithDebInfo/k3l6ic5n/arm64-v8a/android_gradle_build.json"
+          },
+          {
+            "abiName": "x86",
+            "abiApi": 21,
+            "abiNdkMajor": 25,
+            "abiStl": "c++_shared",
+            "abiLibrary": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/RelWithDebInfo/k3l6ic5n/x86/libopencv_jni_shared.a",
+            "abiAndroidGradleBuildJsonFile": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/RelWithDebInfo/k3l6ic5n/x86/android_gradle_build.json"
+          },
+          {
+            "abiName": "x86_64",
+            "abiApi": 21,
+            "abiNdkMajor": 25,
+            "abiStl": "c++_shared",
+            "abiLibrary": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/RelWithDebInfo/k3l6ic5n/x86_64/libopencv_jni_shared.a",
+            "abiAndroidGradleBuildJsonFile": "/home/channey/hust-se-softwareEngineer-ocr-on-andriod-/learnONNX/OpenCV/.cxx/RelWithDebInfo/k3l6ic5n/x86_64/android_gradle_build.json"
+          }
+        ]
+      }
+    ]
+  }
+}

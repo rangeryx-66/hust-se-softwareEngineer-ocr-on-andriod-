@@ -37,12 +37,9 @@ public class PostProcess {
                 score_link.put(i, j, theTextLink[i][j][1]);
             }
         }
-        Log.d(TAG, "postProcess: initialize success to score" );
-        // Assuming getDetBoxes is defined and returns boxes, polys, mapper
         List<RotatedRect> boxes = getDetBoxesCore(score_text, score_link, text_threshold, link_threshold, low_text);
         boxes = adjustResultCoordinates(boxes, ratio_w, ratio_h);
         List<int[]> result=convertPolys(boxes);
-        Log.d(TAG, "postProcess: before group_text_box success");
         List<Object>ans=new ArrayList<>();
 
         List<Object>hflist=groupTextBox(result);
@@ -54,7 +51,6 @@ public class PostProcess {
                 horizontalAgg.add(item);
         }
 
-        // Filter freeList
         List<double[][]> freeListAgg = new ArrayList<>();
 
         for (double[][] box : freeList) {
@@ -146,24 +142,19 @@ public class PostProcess {
         Mat stats = new Mat();
         Mat centroids = new Mat();
         int nLabels = Imgproc.connectedComponentsWithStats(textScoreComb, labels, stats, centroids,4);
-        Log.d(TAG, "getDetBoxesCore: stats"+ stats.dump());
-        Log.d(TAG, "getDetBoxesCore: stats"+ stats);
         List<RotatedRect> det = new ArrayList<>();
         List<Integer> mapper = new ArrayList<>();
 
         for (int k = 1; k < nLabels; k++) {
-            // Size filtering
             Mat kstat=stats.row(k);
             int size = (int) kstat.get(0, Imgproc.CC_STAT_AREA)[0];
             if (size < 10) continue;
 
-            // Thresholding
             Mat mask = new Mat();
             Core.inRange(labels, new Scalar(k), new Scalar(k), mask);
             Core.MinMaxLocResult mmr = Core.minMaxLoc(textMap, mask);
             if (mmr.maxVal < textThreshold) continue;
 
-            // Make segmentation map
             Mat segmap = Mat.zeros(textMap.size(), CvType.CV_8U);
             segmap.setTo(new Scalar(255), mask);
             Mat mask1 = new Mat();
@@ -174,7 +165,6 @@ public class PostProcess {
             Core.bitwise_and(mask1, mask2, combinedMask);
             segmap.setTo(new Scalar(0), combinedMask);
 
-            // Get bounding box stats
             int x = (int) kstat.get(0,Imgproc.CC_STAT_LEFT)[0];
             int y = (int) kstat.get(0,Imgproc.CC_STAT_TOP)[0];
             int w = (int) kstat.get(0,Imgproc.CC_STAT_WIDTH)[0];
@@ -186,11 +176,9 @@ public class PostProcess {
             int sy = Math.max(0, y - niter);
             int ey = Math.min(imgH, y + h + niter + 1);
 
-            // Dilation
             Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(1 + niter, 1 + niter));
             Imgproc.dilate(segmap.submat(sy, ey, sx, ex), segmap.submat(sy, ey, sx, ex), kernel);
 
-            // Make box
             List<Point> points = new ArrayList<>();
             for (int i = 0; i < segmap.rows(); i++) {
                 for (int j = 0; j < segmap.cols(); j++) {
@@ -204,7 +192,6 @@ public class PostProcess {
             matOfPoint.fromList(points);
             RotatedRect rectangle = Imgproc.minAreaRect(new MatOfPoint2f(matOfPoint.toArray()));
 
-            // Align diamond-shape
             double wRect = Math.abs(rectangle.size.width);
             double hRect = Math.abs(rectangle.size.height);
             double boxRatio = Math.max(wRect, hRect) / (Math.min(wRect, hRect) + 1e-5);
@@ -222,7 +209,6 @@ public class PostProcess {
                 rectangle = Imgproc.minAreaRect(new MatOfPoint2f(box));
             }
 
-            // Make clock-wise order
             Point[] box = new Point[4];
             rectangle.points(box);
             Arrays.sort(box, Comparator.comparingDouble(a -> a.y + a.x));
@@ -230,7 +216,6 @@ public class PostProcess {
             rectangle = Imgproc.minAreaRect(new MatOfPoint2f(reorderedBox));
 
             det.add(rectangle);
-            Log.d(TAG, "getDetBoxesCore: add"+k);
         }
 
         return det;
@@ -242,7 +227,7 @@ public class PostProcess {
             Point[] vertices = new Point[4];
             box.points(vertices);
 
-            int[] intVertices = new int[8]; // 4 points * 2 coordinates (x, y)
+            int[] intVertices = new int[8];
             for (int i = 0; i < vertices.length; i++) {
                 intVertices[2 * i] = (int) Math.round(vertices[i].x);
                 intVertices[2 * i + 1] = (int) Math.round(vertices[i].y);

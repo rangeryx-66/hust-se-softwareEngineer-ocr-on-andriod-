@@ -1,0 +1,1 @@
+http://schemas.android.com/apk/res-auto;;${\:OpenCV*release*MAIN*sourceProvider*0*resDir*0}/values/attrs.xml,+attr:show_fps,0,Vboolean:;camera_id,0,Venum|integer:any:-1,back:99,front:98,;+styleable:CameraBridgeViewBase,0,V-show_fps:boolean:-camera_id:enum|integer:any:-1,back:99,front:98,;

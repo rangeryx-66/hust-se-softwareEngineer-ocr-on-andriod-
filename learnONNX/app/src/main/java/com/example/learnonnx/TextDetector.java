@@ -18,7 +18,8 @@ public class TextDetector {
     public final static String TAG = "TextDetector";
 
     public static float[][][][] testNet(Mat[] images, OrtEnvironment ortEnv, OrtSession ortSession) throws OrtException {
-        Mat image = images[0];
+        Mat image =new Mat();
+        images[0].copyTo(image);
         Imgproc.cvtColor(image, image, Imgproc.COLOR_BGR2RGB);
         Imgproc.resize(image, image, new Size(800, 608));
         image.convertTo(image, CvType.CV_32F, 1.0 / 255.0);
